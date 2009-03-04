@@ -1,0 +1,42 @@
+plugin.tx_rtpageteaser_pi1 {
+	limitPages = {$plugin.tx_rtpageteaser_pi1.limitPages}
+	
+	templateFile = {$plugin.tx_rtpageteaser_pi1.templateFile}
+	
+	ignorePagesWithoutAbstract = 0
+	
+	ignorePagesWithoutImage = 0
+	
+	cropOnlyAfterWords = 1
+	
+	use_dam_pages = {$plugin.tx_rtpageteaser_pi1.use_dam_pages}
+	
+	singleView {
+	
+		image = IMAGE
+		image {
+			file.maxW = 100m
+			file.maxH = 150m
+		}
+	
+		tstamp_stdWrap {
+			strftime = %x
+		}
+	
+		crdate_stdWrap {
+			strftime = %x
+		}
+		
+		title_stdWrap {
+			typolink.parameter.dataWrap = {field:uid}
+		}
+		
+		keywords_stdWrap {
+			wrap = Keywords:|
+		}
+		
+		morelink_stdWrap {
+			typolink.parameter.dataWrap = {field:uid}
+		}
+	}
+}

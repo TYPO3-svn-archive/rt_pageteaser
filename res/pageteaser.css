@@ -1,0 +1,24 @@
+.tx-rtpageteaser-pi1 {
+	border: 1px solid #cccccc;
+	font-size:0.9em;
+}
+.tx-rtpageteaser-pi1 h3 {
+	font-size: 1em;
+}
+.tx-rtpageteaser-pi1 a {
+	color: #333333;
+	font-size: 0.85em;
+}
+.tx-rtpageteaser-pi1 h3 a {
+	font-size: 1.2em;
+}
+.tx-rtpageteaser-pi1 img {
+	float:left;
+	margin: 0 5px 3px 0;
+}
+.tx-rtpageteaser-pi1 .odd, .tx-rtpageteaser-pi1 .even {
+	padding: 5px;
+}		
+.tx-rtpageteaser-pi1 .even {
+	background-color: #eeeeee;
+}
