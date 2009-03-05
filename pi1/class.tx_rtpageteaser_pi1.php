@@ -126,6 +126,10 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 
 	function getSubpages($masterPid, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages, $userLevel) {
 		$cont = '';
+		$language = $GLOBALS['TSFE']->sys_language_uid;
+		if ((int)$language > 0 ) {
+			#echo t3lib_div::debug($language,'');		
+		}
 		# get list of pages with this pid
 		
 		# create a list of tree-pid's, when $userLevel > 0
@@ -149,7 +153,9 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		} else {
 			$treePidList = $masterPid;
 		}
+		
 #echo t3lib_div::debug($tree->tree,'Baum');
+
 		# check, if user wants to see sub-subpages, and if sorting is pagetree
 		if($userLevel > 0 && $orderPages == 'NORMAL') {
 			$cont = $this->getTreePageteaser($treePidArray, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages);
@@ -477,30 +483,60 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		return $cont;
 	}
 	
-	####################################
-	#
-	# 
-	#
-	
+	/**
+	 * getTreePageteaser function.
+	 * 
+	 * @access protected
+	 * @param mixed $treePidArray contains an array with all pages (and subpages) and the page-data
+	 * @param mixed $limit
+	 * @param mixed $useKeyword
+	 * @param mixed $keywordMode
+	 * @param mixed $orderPages
+	 * @param mixed $sortPages
+	 * @param mixed $use_dam_pages
+	 * @return void
+	 */
 	protected function getTreePageteaser($treePidArray, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages) {
 		$output = '';
 		$counter = 0;
-		#
+		$language = $GLOBALS['TSFE']->sys_language_uid;
+#echo t3lib_div::debug($treePidArray,'');		
+		# we don't need the first page here
 		$mountPoint = array_shift($treePidArray);
+		
 		#
 		if ($sortPages == 'DESC') {
 			$treePidArray = array_reverse($treePidArray, TRUE);
 		}
 #echo t3lib_div::debug($limit,'limit');
+		
 		foreach($treePidArray as $eachPage) {
 			$useThisEntry = 1;
 			
+			// standard language
 			$pageData = $this->pi_getRecord('pages',$eachPage);
+			
+			// language data
+			if ($language > 0) {
+				$languagePageRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','pages_language_overlay','pid = '.$pageData['uid'].' AND sys_language_uid = '.$language);
+				$languagePage = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($languagePageRes);
+				$theKeywords = $languagePage['keywords'];
+				$theAbstract = $languagePage['abstract'];
+				$theDamFiles = $languagePage['tx_dampages_files'];
+				$theMediaFiles = $theDamFiles['media'];
+			} else {
+				$theKeywords = $pageData['keywords'];
+				$theAbstract = $pageData['abstract'];
+				$theDamFiles = $pageData['tx_dampages_files'];
+				$theMediaFiles = $pageData['media'];
+			}
+			
 #echo t3lib_div::debug($eachPage,'');
+			
 			# ignore empty abstracts ?
 			$ignoreMode = 0;
 			$ignoreMode = $this->conf['ignorePagesWithoutAbstract'];
-			if($ignoreMode == 1 && $pageData['abstract'] == '' ) {
+			if($ignoreMode == 1 && $theAbstract == '' ) {
 				$useThisEntry = 0;
 			}
 			
@@ -509,11 +545,11 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 			$ignoreModeImage = $this->conf['ignorePagesWithoutImage'];	
 			if($ignoreModeImage == 1) {
 				# check, if dam_pages is loaded
-				if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 && $pageData['tx_dampages_files <= 0']) {
+				if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 && $theDamFiles <= 0 ) {
 					# yes, dam_pages is loaded
 					$useThisEntry = 0;
 				} else {
-					if ($pageData['media'] == '' || $pageData['media'] == 'NULL' )
+					if ($theMediaFiles == '' || $theMediaFiles == 'NULL' )
 					# normal media field
 					$useThisEntry = 0;
 				}
@@ -525,12 +561,13 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$useKeyword = strtolower(str_replace(' ', '', $useKeyword));
 				$keywords = explode(',', $useKeyword);
 				$numKeywords = count($keywords);
-				
+				$useThisEntry = 0;
+								
 				switch ($keywordMode) {
 					case 'OR':
 						for ($i = 0; $i < $numKeywords; $i++) {
-							$query = '/^'.$keywords[$i].'/';
-							if (preg_match($query, $pageData['keywords']) == 1) {
+							$query = '/'.$keywords[$i].'/';			
+							if (preg_match($query, $theKeywords) == 1) {
 								$useThisEntry = 1;
 							}
 						}
@@ -538,34 +575,41 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 					case 'AND';
 						$hits = 0;
 						for ($i = 0; $i < $numKeywords; $i++) {
-							$query = '/^'.$keywords[$i].'/';
-							if (preg_match($query, $pageData['keywords']) == 1) {
-								$hits++;
+							$query = '/'.$keywords[$i].'/';
+							$horst = preg_match($query, $theKeywords);
+							if (preg_match($query, $theKeywords) == 1) {
+								$hits+=1;
 							}
 						}
-						if ($hits != $numKeywords) {
-							$useThisEntry = 0;
+						if ($hits == $numKeywords) {
+							$useThisEntry = 1;
 						}
 						break;
 					case 'NOT':
 						for ($i = 0; $i < $numKeywords; $i++) {
-							$query = '/^'.$keywords[$i].'/';
-							if (preg_match($query, $pageData['keywords']) == 1) {
-								$useThisEntry = 0;
+							$query = '/'.$keywords[$i].'/';
+							if (preg_match($query, $theKeywords) != 1) {
+								$useThisEntry = 1;
 							}
 						}
 						break;
 					default:
 				}
-			}
-			
+			}			
 
 			if ($useThisEntry == 1 && $counter < $limit) {
-				$output .= $this->outputTeaser($pageData, $counter, $use_dam_pages);
-				$counter++;
-			}
-			
-			
+				// if language is selected
+				// only output this entry, if there is a translated version
+				if ($language > 0 ) {
+					// we need language X	
+					$output .= $this->outputTeaser($languagePage, $counter, $use_dam_pages);
+					$counter++;
+				} else {
+					// standard language: output EVERYTHING ;)
+					$output .= $this->outputTeaser($pageData, $counter, $use_dam_pages);
+					$counter++;
+				}
+			}			
 		}
 		
 		return $output;
