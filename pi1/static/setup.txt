@@ -27,16 +27,16 @@ plugin.tx_rtpageteaser_pi1 {
 			strftime = %x
 		}
 		
-		title_stdWrap {
-			typolink.parameter.dataWrap = {field:uid}
-		}
+		#title_stdWrap {
+			#typolink.parameter.dataWrap = {field:uid}
+		#}
 		
 		keywords_stdWrap {
 			wrap = Keywords:|
 		}
 		
-		morelink_stdWrap {
-			typolink.parameter.dataWrap = {field:uid}
-		}
+		#morelink_stdWrap {
+			#typolink.parameter.dataWrap = {field:uid}
+		#}
 	}
 }

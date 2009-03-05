@@ -1,3 +1,7 @@
+09-03-05 Stefan Voelker <t3x@nyxos.de>
+
+	* multilanguage support (for mode "selected pages")
+	
 08-11-10 Stefan Voelker  <t3x@nyxos.de>
 
 	* bugix: ordering when using 'depth' is now correct

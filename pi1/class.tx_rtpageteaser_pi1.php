@@ -275,9 +275,9 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$limit);
 			$counter = 0;
 			while ($pageData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($subpages) ) {
-	#echo t3lib_div::debug($pageData,'');
+	#echo t3lib_div::debug($pageData,'');	
 				$cont .= $this->outputTeaser($pageData, $counter, $use_dam_pages);
-				$counter++;
+				$counter ++;
 			}		
 			$GLOBALS['TYPO3_DB']->sql_free_result($subpages);	
 			if($counter == 0) {
@@ -301,9 +301,21 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		$numPages = count($selectedPages);
 		$counter = 0;
 		for($i = 0; $i < $numPages; $i++) {
-			$page = $this->pi_getRecord('pages',$selectedPages[$i]);
-			$cont .= $this->outputTeaser($page, $counter, $use_dam_pages);
-			$counter ++;
+			// language
+			$language = $GLOBALS['TSFE']->sys_language_uid;
+			if ($language > 0) {
+				// get language
+				$pageRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','pages_language_overlay','pid = '.$selectedPages[$i].' AND sys_language_uid = '.$language);
+				$page = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($pageRes);
+			} else {
+				// standard language
+				$page = $this->pi_getRecord('pages',$selectedPages[$i]);
+			}
+			// if there is no content of page properties, ignore page
+			if (is_array($page) && (int)$page['uid'] > 0) {
+				$cont .= $this->outputTeaser($page, $counter, $use_dam_pages);
+				$counter ++;
+			}
 		}
 		return $cont;
 	}
@@ -388,8 +400,28 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$markers['###IMAGE###'] = '';
 			}	
 		}
-				
-		$markers['###TITLE###'] = $cObj->stdWrap($pageData['title'], $this->conf['singleView.']['title_stdWrap.']);		
+		
+		// linked title
+		
+		$pageId = $pageData['uid'];
+		$linkConf = array(
+		  // Link to current page
+		  'parameter' => $pageId,
+		  // We must add cHash because we use parameters
+		  'useCashHash' => true,
+		  // We want link only
+		  'returnLast' => 'url',
+		);
+		$language = (int)t3lib_div::GPvar('L');
+		if ($language > 0) {
+			// our data set is from pages_language_overlay, so we need to jump to pid
+			$linkConf['parameter'] = $pageData['pid'];
+		}
+		$url = $this->cObj->typoLink('', $linkConf);
+		
+		$markers['###TITLE###'] = '<a href="'.$url.'">'.$pageData['title'].'</a>';
+		
+		// teaser text
 		
 		$teaserText = $cObj->stdWrap(htmlspecialchars($pageData['abstract']), $this->conf['singleView.']['abstract_stdWrap.']);
 		
@@ -438,7 +470,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 			$markers['###KEYWORDS###'] = $cObj->stdWrap($pageData['keywords'], $this->conf['singleView.']['keywords_stdWrap.']);
 		}
 		
-		$markers['###MORELINK###'] = $cObj->stdWrap($this->pi_getLL('moreLink'), $this->conf['singleView.']['morelink_stdWrap.']);
+		$markers['###MORELINK###'] = '<a href="'.$url.'">'.$this->pi_getLL('moreLink').'</a>';
 		
 		$cont = $this->cObj->substituteMarkerArray($template, $markers);
 		
