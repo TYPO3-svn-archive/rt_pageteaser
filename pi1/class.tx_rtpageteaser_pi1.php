@@ -370,20 +370,22 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 			$img['file.']['maxH'] = (int)$userMaxHeight.'m';
 			
 		}
-
+	
+		// fallback for translated images
+		$imageFallBack = $this->conf['getImageFromStandardPage'];
+		$language = $GLOBALS['TSFE']->sys_language_uid;
+		
 		# check, if dam_pages is installed
 		if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 ) {
 			# use DAM field
 			
 			$useTable = 'pages';
 			// if a language is selected, we need to use another table
-			$language = $GLOBALS['TSFE']->sys_language_uid;
 			if ((int)$language > 0 ) {
 				$useTable = 'pages_language_overlay';
 			}
 			$damPics = tx_dam_db::getReferencedFiles($useTable, $pageUid,'tx_dampages_files', 'tx_dam_mm_ref');
-			// fallback for translated images
-			$imageFallBack = $this->conf['getImageFromStandardPage'];
+
 			if ( $imageFallBack == 1 && empty($damPics['files']) && $language > 0 ) {
 				$pageUid = $pageData['pid'];
 				$damPics = tx_dam_db::getReferencedFiles('pages', $pageUid, 'tx_dampages_files', 'tx_dam_mm_ref');		
@@ -407,13 +409,30 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		     }
 			
 		} else {
-			# use original media field		
+			# use original media field
 			if ($pageData['media'] != '' ) {
 				$img['file'] = $imagePath.$pageData['media'];
 				$teaserPicture = $this->cObj->IMAGE($img);
 				$markers['###IMAGE###'] = $teaserPicture;
 			} else {
-				$markers['###IMAGE###'] = '';
+				// there's no image in pages / pages_overlay
+				if ($imageFallBack == 1 && $language > 0) {
+					// language fallback
+					// get media field from original pages table
+					$origPage = $this->pi_getRecord('pages', $pageData['pid']);
+					if ($origPage['media'] != '') {
+						// use original media info
+						$img['file'] = $imagePath.$origPage['media'];
+						$teaserPicture = $this->cObj->IMAGE($img);
+						$markers['###IMAGE###'] = $teaserPicture;
+					} else {
+						// if there is no image, clear marker
+						$markers['###IMAGE###'] = '';
+					}					
+				} else {
+					// no media and no fallback: clear marker
+					$markers['###IMAGE###'] = '';
+				}
 			}	
 		}
 		
