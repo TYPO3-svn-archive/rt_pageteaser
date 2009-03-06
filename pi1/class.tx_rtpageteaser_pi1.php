@@ -127,9 +127,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 	function getSubpages($masterPid, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages, $userLevel) {
 		$cont = '';
 		$language = $GLOBALS['TSFE']->sys_language_uid;
-		if ((int)$language > 0 ) {
-			#echo t3lib_div::debug($language,'');		
-		}
+
 		# get list of pages with this pid
 		
 		# create a list of tree-pid's, when $userLevel > 0
@@ -160,6 +158,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		if($userLevel > 0 && $orderPages == 'NORMAL') {
 			$cont = $this->getTreePageteaser($treePidArray, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages);
 		} else {
+			// ok, user wants to control everything...
 			# if $useKeyword is not empty, use it as additional clause
 			if($useKeyword != '' && $useKeyword != 1 && ($keywordMode == 'AND' || $keywordMode == 'OR' || $keywordMode == 'NOT') ) {
 				
@@ -270,7 +269,8 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 					$addWhereClause .= ' AND ( media != "" AND media != "NULL" ) ';
 				}
 			}
-			# NULL
+			# language
+			
 			
 			$subpages = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'uid, title, abstract, media, keywords, tstamp, crdate, sorting',
@@ -375,7 +375,19 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 ) {
 			# use DAM field
 			
-			$damPics = tx_dam_db::getReferencedFiles('pages', $pageUid,'tx_dampages_files', 'tx_dam_mm_ref');
+			$useTable = 'pages';
+			// if a language is selected, we need to use another table
+			$language = $GLOBALS['TSFE']->sys_language_uid;
+			if ((int)$language > 0 ) {
+				$useTable = 'pages_language_overlay';
+			}
+			$damPics = tx_dam_db::getReferencedFiles($useTable, $pageUid,'tx_dampages_files', 'tx_dam_mm_ref');
+			// fallback for translated images
+			$imageFallBack = $this->conf['getImageFromStandardPage'];
+			if ( $imageFallBack == 1 && empty($damPics['files']) && $language > 0 ) {
+				$pageUid = $pageData['pid'];
+				$damPics = tx_dam_db::getReferencedFiles('pages', $pageUid, 'tx_dampages_files', 'tx_dam_mm_ref');		
+			}
 			list($uidDam, $filePath) = each($damPics['files']);
 			
 			$mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
@@ -386,8 +398,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		 	} else {
 		 		$media->fetchFullIndex();
 		 	}
- 
-		     #echo t3lib_div::debug($media->meta);
+#echo t3lib_div::debug($media->meta);
 		     if( (int)$media->meta['uid'] > 0 ) {
 		     	$img['file'] = $media->meta['file_path'].$media->meta['file_name'];
 		     	$markers['###IMAGE###'] = $this->cObj->IMAGE($img);
@@ -396,8 +407,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		     }
 			
 		} else {
-			# use original media field
-			
+			# use original media field		
 			if ($pageData['media'] != '' ) {
 				$img['file'] = $imagePath.$pageData['media'];
 				$teaserPicture = $this->cObj->IMAGE($img);

@@ -11,6 +11,9 @@ plugin.tx_rtpageteaser_pi1 {
 	
 	use_dam_pages = {$plugin.tx_rtpageteaser_pi1.use_dam_pages}
 	
+	// if there is no image on the page data of the translated page, should the image from the standard page be rendered?
+	getImageFromStandardPage = 1
+	
 	singleView {
 	
 		image = IMAGE
