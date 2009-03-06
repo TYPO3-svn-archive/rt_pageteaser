@@ -136,13 +136,14 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 			$treeStartingPoint = $masterPid;
 			$treeStartingRecord = $this->pi_getRecord('pages', $treeStartingPoint);
 			$depth = $userLevel;		
+			
 			// Initialize tree object:
 			$tree = t3lib_div::makeInstance('t3lib_pageTree');
 			$tree->init($this->cObj->enableFields('pages'));
 			$tree->tree[] = array( 'row' => $treeStartingRecord );
+			
 			// Create the tree from starting point:
 			$tree->getTree($treeStartingPoint, $depth, '');
-#echo t3lib_div::debug($tree->tree,'');
 			$treePidArray = array();
 			foreach($tree->tree as $singlePage ) {
 				$treePidArray[] = $singlePage['row']['uid'];
@@ -151,18 +152,17 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		} else {
 			$treePidList = $masterPid;
 		}
-		
-#echo t3lib_div::debug($tree->tree,'Baum');
 
 		# check, if user wants to see sub-subpages, and if sorting is pagetree
 		if($userLevel > 0 && $orderPages == 'NORMAL') {
 			$cont = $this->getTreePageteaser($treePidArray, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages);
+			
 		} else {
 			// ok, user wants to control a little bit more...
 			
 			// languagesupport
 			$language = (int)$GLOBALS['TSFE']->sys_language_uid;
-
+			
 			# if $useKeyword is not empty, use it as additional clause
 			if($useKeyword != '' && $useKeyword != 1 && ($keywordMode == 'AND' || $keywordMode == 'OR' || $keywordMode == 'NOT') ) {
 				
@@ -199,7 +199,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 					case 'NOT':
 						for ($i = 0; $i < $numKeywords; $i++) {
 							if ($i == 0) {
-								$addWhereClause = ' AND (';
+								$addWhereClause .= ' AND (';
 							}
 							if($i == $numKeywords-1) {
 								$addWhereClause .= 'NOT keywords LIKE "%'.$keywords[$i].'%" )';
@@ -209,33 +209,33 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 						}
 						break;
 					default:
-				}		
+				}
 			}
 			
-				# ordering
-				
-				$orderBy = '';
-				switch ($orderPages) {
-					case 'NORMAL':
-						$orderBy .= ' pages.sorting';
-						break;
-					case 'TITLE':
-						$orderBy .= ' pages.title';
-						break;
-					case 'TSTAMP':
-						$orderBy .= ' pages.tstamp';
-						break;
-					case 'CRDATE':
-						$orderBy .= ' pages.crdate';
-						break;
-					case 'RANDOM':
-						$orderBy .= ' RAND()';
-						break;
-					default:
-				}
-				
-				# sorting
-				if($orderPages != 'RANDOM') {
+			# ordering
+			
+			$orderBy = '';
+			switch ($orderPages) {
+				case 'NORMAL':
+					$orderBy .= ' pages.sorting';
+					break;
+				case 'TITLE':
+					$orderBy .= ' pages.title';
+					break;
+				case 'TSTAMP':
+					$orderBy .= ' pages.tstamp';
+					break;
+				case 'CRDATE':
+					$orderBy .= ' pages.crdate';
+					break;
+				case 'RANDOM':
+					$orderBy .= ' RAND()';
+					break;
+				default:
+			}
+			
+			# sorting
+			if($orderPages != 'RANDOM') {
 				switch ($sortPages) {
 					case 'ASC':
 						$orderBy .= ' ASC';
@@ -247,7 +247,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 						break;
 					default:
 				}
-				}
+			}
 			
 			#
 			# check ignoreMode for pages without text in the abstract
@@ -297,11 +297,9 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$limit);
 				// go throuh each page and check conditions (keywords, media, etc.)
 				while ($pageData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($subpages) ) {
-#echo t3lib_div::debug($pageData,'ori');
 					// is there a translated version
 					$langPageRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','pages_language_overlay','pid = '.$pageData['uid'].' AND sys_language_uid = '.$language);
 					$langPage = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($langPageRes);
-# echo t3lib_div::debug($langPage,'lang');
 			
 					// everything like ordererd ?
 					$usePage = 1;
@@ -406,7 +404,6 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$limit);
 				
 				while ($pageData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($subpages) ) {
-		#echo t3lib_div::debug($pageData,'');	
 					$cont .= $this->outputTeaser($pageData, $counter, $use_dam_pages);
 					$counter ++;
 				}		
@@ -463,7 +460,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		$cont = '';
 		$imagePath = 'uploads/media/';
 		$pageUid = $pageData['uid'];
-#echo t3lib_div::debug($pageData,'pageData');
+
 		# cropping
 		$userCrop = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'crop', 'sContent');
 		if ($userCrop && (int)$userCrop > 1) {
@@ -528,7 +525,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		 	} else {
 		 		$media->fetchFullIndex();
 		 	}
-#echo t3lib_div::debug($media->meta);
+
 		     if( (int)$media->meta['uid'] > 0 ) {
 		     	$img['file'] = $media->meta['file_path'].$media->meta['file_name'];
 		     	$markers['###IMAGE###'] = $this->cObj->IMAGE($img);
@@ -658,7 +655,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		$counter = 0;
 		// language support
 		$language = $GLOBALS['TSFE']->sys_language_uid;
-#echo t3lib_div::debug($treePidArray,'');		
+
 		# we don't need the first page here
 		$mountPoint = array_shift($treePidArray);
 		
@@ -666,7 +663,6 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		if ($sortPages == 'DESC') {
 			$treePidArray = array_reverse($treePidArray, TRUE);
 		}
-#echo t3lib_div::debug($limit,'limit');
 		
 		foreach($treePidArray as $eachPage) {
 			$useThisEntry = 1;
@@ -688,8 +684,6 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$theDamFiles = $pageData['tx_dampages_files'];
 				$theMediaFiles = $pageData['media'];
 			}
-			
-#echo t3lib_div::debug($eachPage,'');
 			
 			# ignore empty abstracts ?
 			$ignoreMode = 0;

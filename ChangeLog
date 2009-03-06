@@ -1,3 +1,9 @@
+09-03-06 Stefan Voelker <t3x@nyxos.de>
+
+	* finished multilanguage support
+	* fixed some minor bugs
+	* this will be V 1.4.0
+
 09-03-05 Stefan Voelker <t3x@nyxos.de>
 
 	* multilanguage support (for mode "selected pages")
