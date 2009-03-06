@@ -158,7 +158,11 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		if($userLevel > 0 && $orderPages == 'NORMAL') {
 			$cont = $this->getTreePageteaser($treePidArray, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages);
 		} else {
-			// ok, user wants to control everything...
+			// ok, user wants to control a little bit more...
+			
+			// languagesupport
+			$language = (int)$GLOBALS['TSFE']->sys_language_uid;
+
 			# if $useKeyword is not empty, use it as additional clause
 			if($useKeyword != '' && $useKeyword != 1 && ($keywordMode == 'AND' || $keywordMode == 'OR' || $keywordMode == 'NOT') ) {
 				
@@ -213,7 +217,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				$orderBy = '';
 				switch ($orderPages) {
 					case 'NORMAL':
-							$orderBy .= ' pages.sorting';
+						$orderBy .= ' pages.sorting';
 						break;
 					case 'TITLE':
 						$orderBy .= ' pages.title';
@@ -235,9 +239,11 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 				switch ($sortPages) {
 					case 'ASC':
 						$orderBy .= ' ASC';
+						$langMultisort = SORT_ASC;
 						break;
 					case 'DESC':
 						$orderBy .= ' DESC';
+						$langMultisort = SORT_DESC;
 						break;
 					default:
 				}
@@ -258,7 +264,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 			#
 			
 			$ignoreModeImage = 0;
-			$ignoreModeImage = $this->conf['ignorePagesWithoutImage'];	
+			$ignoreModeImage = (int)$this->conf['ignorePagesWithoutImage'];	
 			if($ignoreModeImage == 1) {
 				# check, if dam_pages is loaded
 				if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 ) {
@@ -269,23 +275,145 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 					$addWhereClause .= ' AND ( media != "" AND media != "NULL" ) ';
 				}
 			}
-			# language
 			
+			# language support
+			// get all pages from the original without restrictions (because it's not important, if original page doesn't contain images, because we want antoher language
+			$counter = 0;
+			$langPagesNew = array();
+			$newTitle = array();
+			$newCrdate = array();
+			$newTstamp = array();
+
+			if ($language > 0) {
 			
-			$subpages = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				// get all original pages
+				
+				$subpages = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'uid, title, abstract, media, keywords, tstamp, crdate, sorting',
+					'pages',
+					'pid IN ('.$treePidList.') '.$this->cObj->enableFields('pages'),
+					'',# group by
+					$orderBy,
+				$limit);
+				// go throuh each page and check conditions (keywords, media, etc.)
+				while ($pageData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($subpages) ) {
+#echo t3lib_div::debug($pageData,'ori');
+					// is there a translated version
+					$langPageRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','pages_language_overlay','pid = '.$pageData['uid'].' AND sys_language_uid = '.$language);
+					$langPage = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($langPageRes);
+# echo t3lib_div::debug($langPage,'lang');
+			
+					// everything like ordererd ?
+					$usePage = 1;
+					
+					// ignoreMode for pages without image
+					if ($ignoreModeImage == 1) {
+						if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 ) {
+							// dam_pages field
+							if ($langPage['tx_dampages_files'] == 0 ) $usePage = 0;
+						} else {
+							// normal media field
+							if ($langPage['media'] == '' || $langPage['media'] == 'NULL') $usePage = 0;
+						}
+					}
+					
+					# ignoreMode for pages without text in the abstract
+					if($ignoreMode == 1) {
+						if ($langPage['abstract'] == '') $usePage = 0;
+					}
+					
+					// keywords
+					$pageKeywords = $langPage['keywords'];
+					switch ($keywordMode) {
+						case 'OR':
+							$hits = 0;
+							for ($i = 0; $i < $numKeywords; $i++) {
+								$query = '/'.$keywords[$i].'/';			
+								if (preg_match($query, $pageKeywords) == 1) {
+									$hits++;
+								}
+								if ($hits == 0) $usePage = 0;
+							}
+							break;
+						case 'AND';
+							$hits = 0;
+							for ($i = 0; $i < $numKeywords; $i++) {
+								$query = '/'.$keywords[$i].'/';			
+								if (preg_match($query, $pageKeywords) == 1) {
+									$hits++;
+								}
+								if ($hits < $numKeywords ) $usePage = 0;
+							}
+							break;
+						case 'NOT':
+							$hits = 0;
+							for ($i = 0; $i < $numKeywords; $i++) {
+								$query = '/'.$keywords[$i].'/';
+								if (preg_match($query, $pageKeywords) == 0) {
+									$hits++;
+								}
+								if ($hits == 0) $usePage = 0; 
+							}
+							break;
+						default:
+					}			
+
+					// when everything is ok, pack it into new array
+					
+					if ($usePage == 1) {
+							$langPagesNew[] = $langPage;
+							$newTitle[] = $langPage['title'];
+							$newCrdate[] = $langPage['crdate'];
+							$newTstamp[] = $langPage['tstamp'];
+					}
+					
+						
+				}
+				
+				// order and sort it
+				switch ($orderPages) {
+					case 'TITLE':
+						array_multisort($newTitle, $langMultisort, $langPagesNew);
+						break;
+					case 'TSTAMP':
+						array_multisort($newTstamp, $langMultisort, $langPagesNew);
+						break;
+					case 'CRDATE':
+						array_multisort($newCrdate, $langMultisort, $langPagesNew);
+						break;
+					case 'RANDOM':
+						shuffle($langPagesNew);
+						break;
+					default:
+				}
+				
+				// move it to output
+				foreach($langPagesNew as $page) {
+					$cont .= $this->outputTeaser($page, $counter, $use_dam_pages);
+					$counter ++;
+				}
+				
+			} else {
+			
+				// standard language
+				
+				$subpages = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'uid, title, abstract, media, keywords, tstamp, crdate, sorting',
 					'pages',
 					'pid IN ('.$treePidList.') '.$addWhereClause.$this->cObj->enableFields('pages'),
 					'',# group by
 					$orderBy,
 				$limit);
-			$counter = 0;
-			while ($pageData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($subpages) ) {
-	#echo t3lib_div::debug($pageData,'');	
-				$cont .= $this->outputTeaser($pageData, $counter, $use_dam_pages);
-				$counter ++;
-			}		
-			$GLOBALS['TYPO3_DB']->sql_free_result($subpages);	
+				
+				while ($pageData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($subpages) ) {
+		#echo t3lib_div::debug($pageData,'');	
+					$cont .= $this->outputTeaser($pageData, $counter, $use_dam_pages);
+					$counter ++;
+				}		
+				$GLOBALS['TYPO3_DB']->sql_free_result($subpages);
+				
+			}
+			
 			if($counter == 0) {
 				$cont = $this->pi_getLL('noresult');
 			}		
@@ -379,12 +507,12 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		if (t3lib_extMgm::isloaded('dam_pages') && $use_dam_pages == 1 ) {
 			# use DAM field
 			
-			$useTable = 'pages';
+			$thePageTable = 'pages';
 			// if a language is selected, we need to use another table
 			if ((int)$language > 0 ) {
-				$useTable = 'pages_language_overlay';
+				$thePageTable = 'pages_language_overlay';
 			}
-			$damPics = tx_dam_db::getReferencedFiles($useTable, $pageUid,'tx_dampages_files', 'tx_dam_mm_ref');
+			$damPics = tx_dam_db::getReferencedFiles($thePageTable, $pageUid,'tx_dampages_files', 'tx_dam_mm_ref');
 
 			if ( $imageFallBack == 1 && empty($damPics['files']) && $language > 0 ) {
 				$pageUid = $pageData['pid'];
@@ -528,6 +656,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 	protected function getTreePageteaser($treePidArray, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages) {
 		$output = '';
 		$counter = 0;
+		// language support
 		$language = $GLOBALS['TSFE']->sys_language_uid;
 #echo t3lib_div::debug($treePidArray,'');		
 		# we don't need the first page here
