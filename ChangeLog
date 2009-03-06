@@ -1,6 +1,7 @@
 09-03-06 Stefan Voelker <t3x@nyxos.de>
 
 	* finished multilanguage support
+	* new TS option for activating image fallback for translated pages, so it is possible to get the image from the original page
 	* fixed some minor bugs
 	* this will be V 1.4.0
 
