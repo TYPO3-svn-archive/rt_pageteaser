@@ -568,7 +568,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		  // Link to current page
 		  'parameter' => $pageId,
 		  // We must add cHash because we use parameters
-		  'useCashHash' => true,
+		  'useCacheHash' => true,
 		  // We want link only
 		  'returnLast' => 'url',
 		);
