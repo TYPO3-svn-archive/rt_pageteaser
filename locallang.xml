@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for extension 'rt_pageteaser'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="pi1_title">Universal Pageteaser</label>
+			<label index="pi1_plus_wiz_description">Universal Pageteaser</label>
+	<!-- Flexforms -->
+    		<label index="flexform.sheets.general.title">Settings</label>
+    		<label index="flexform.sheets.general.mode">Mode:</label>
+    		<label index="flexform.sheets.general.mode.0">Selected pages</label>
+    		<label index="flexform.sheets.general.mode.1">Subpages from selected pages</label>    		
+    		<label index="flexform.sheets.general.page">Page, from which the subpages should be shown as teasers:</label>
+    		<label index="flexform.sheets.general.subpages">Pages to show as teaser:</label>
+    		<label index="flexform.sheets.general.templateFile">Templatefile:</label>
+    		<label index="flexform.sheets.general.orderPages">Ordering of pages:</label>
+    		<label index="flexform.sheets.general.sortPages">Sorting:</label>
+    		<label index="flexform.sheets.general.keywords">Only show subpages with following keywords:</label>
+    		<label index="flexform.sheets.general.limitPages">Maximum number of pageteasers:</label>
+    		<label index="flexform.sheets.general.levelSubpages">Depth of sub-subpages:</label>
+    		<label index="flexform.sheets.general.keywordMode">Keyword-mode</label> 
+    		<label index="flexform.sheets.general.keywordMode.0">Show pages with all these keywords (AND)</label> 
+    		<label index="flexform.sheets.general.keywordMode.1">Show pages with one or some of these keywords (OR)</label> 
+    		<label index="flexform.sheets.general.keywordMode.2">Show pages without these keywords (NOT)</label>
+    		<label index="flexform.sheets.general.orderPages.0">Pagetree position</label> 
+    		<label index="flexform.sheets.general.orderPages.1">Sitetitle</label> 
+    		<label index="flexform.sheets.general.orderPages.2">Changed</label> 
+    		<label index="flexform.sheets.general.orderPages.3">Created</label> 
+    		<label index="flexform.sheets.general.orderPages.4">Random</label>
+    		<label index="flexform.sheets.general.sortPages.0">Ascending</label> 
+    		<label index="flexform.sheets.general.sortPages.1">Descending</label>
+    		<label index="flexform.sheets.content.title">Contents</label>
+    		<label index="flexform.sheets.content.maxWidth">Image - max. width (px):</label>
+    		<label index="flexform.sheets.content.maxHeight">Image - max. height (px):</label>
+    		<label index="flexform.sheets.content.crop">Crop text after ... chars:</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="pi1_title">Universal Pageteaser</label>
+			<label index="pi1_plus_wiz_description">Universeller Pageteaser</label>
+	<!-- Flexforms -->
+    		<label index="flexform.sheets.general.title">Einstellungen</label>
+    		<label index="flexform.sheets.general.mode">Modus:</label>
+    		<label index="flexform.sheets.general.mode.0">Ausgewählte Seiten</label>
+    		<label index="flexform.sheets.general.mode.1">Unterseiten von ausgewählter Seite</label>    		
+    		<label index="flexform.sheets.general.page">Seite, deren Unterseiten angezeigt werden soll:</label>
+    		<label index="flexform.sheets.general.subpages">Seiten, die angezeigt werden sollen:</label>
+    		<label index="flexform.sheets.general.templateFile">Templatedatei:</label>
+    		<label index="flexform.sheets.general.orderPages">Anordnung der Seiten nach:</label>
+    		<label index="flexform.sheets.general.sortPages">Sortierung:</label>
+    		<label index="flexform.sheets.general.keywords">Nur Unterseiten anzeigen, die mit folgenden Keywords gesichert sind:</label>
+    		<label index="flexform.sheets.general.limitPages">Anzahl der Seiten, die angezeigt werden sollen:</label>
+    		<label index="flexform.sheets.general.levelSubpages">Wieviele Ebenen der Unterseiten sollen mit angezeigt werden:</label>
+    		<label index="flexform.sheets.general.keywordMode">Keyword-Modus</label> 
+    		<label index="flexform.sheets.general.keywordMode.0">Zeige Seiten mit allen Keywords (und)</label> 
+    		<label index="flexform.sheets.general.keywordMode.1">Zeige Seiten mit einem beliebigen Keyword (oder)</label> 
+    		<label index="flexform.sheets.general.keywordMode.2">Zeige Seiten, ohne angegebene Keywords (nicht)</label> 
+    		<label index="flexform.sheets.general.orderPages.0">Position im Seitenbaum</label> 
+    		<label index="flexform.sheets.general.orderPages.1">Seitentitel</label> 
+    		<label index="flexform.sheets.general.orderPages.2">Änderungsdatum</label> 
+    		<label index="flexform.sheets.general.orderPages.3">Erzeugungsdatum</label> 
+    		<label index="flexform.sheets.general.orderPages.4">Zufall</label>
+    		<label index="flexform.sheets.general.sortPages.0">Aufsteigend</label> 
+    		<label index="flexform.sheets.general.sortPages.1">Absteigend</label>
+    		<label index="flexform.sheets.content.title">Inhalte</label>
+    		<label index="flexform.sheets.content.maxWidth">Bild - maximale Breite (px):</label>
+    		<label index="flexform.sheets.content.maxHeight">Bild - maximale Höhe (px):</label>
+    		<label index="flexform.sheets.content.crop">Text kürzen nach ... Zeichen:</label>
+		</languageKey>
+	</data>
+</T3locallang>

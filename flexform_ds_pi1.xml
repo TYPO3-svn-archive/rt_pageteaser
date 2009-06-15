@@ -1,0 +1,255 @@
+<T3DataStructure>
+  <meta>
+    <langDisable>1</langDisable>
+  </meta>
+  <sheets>
+    <sSelections>    
+      <ROOT>
+	<TCEforms>
+	  <sheetTitle>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.title</sheetTitle>
+	</TCEforms>
+	<type>array</type>
+	<el>
+	
+		<mode>
+			<TCEforms>
+				<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.mode</label>
+				<config>
+					<type>select</type>
+					<items type="array">
+						<numIndex index="0" type="array">
+							<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.mode.1</numIndex>
+							<numIndex index="1">DIRECTORY</numIndex>
+						</numIndex>
+						<numIndex index="1" type="array">
+							<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.mode.0</numIndex>
+							<numIndex index="1">RECORDS</numIndex>
+						</numIndex>
+        			</items>
+				</config>
+				<onChange>reload</onChange> 
+			</TCEforms>
+		</mode>
+	
+	<pageBrowser>
+	    <TCEforms>
+	    <displayCond>FIELD:mode:=:RECORDS</displayCond>
+	      <label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.subpages</label>
+	      <config>
+		<type>group</type>
+		<internal_type>db</internal_type>
+		<allowed>pages</allowed>
+		<size>5</size>
+		<maxitems>100</maxitems>
+		<minitems>0</minitems>
+		<show_thumbs>1</show_thumbs>
+	      </config>
+	    </TCEforms>
+	  </pageBrowser>
+					
+	  <pageBrowserSingle>
+	    <TCEforms>
+	    <displayCond>FIELD:mode:=:DIRECTORY</displayCond>
+	      <label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.page</label>
+	      <config>
+		<type>group</type>
+		<internal_type>db</internal_type>
+		<allowed>pages</allowed>
+		<size>1</size>
+		<maxitems>1</maxitems>
+		<minitems>0</minitems>
+		<show_thumbs>0</show_thumbs>
+	      </config>
+	    </TCEforms>
+	  </pageBrowserSingle>
+	  
+	  <levelSubpages>
+		<TCEforms>
+		<displayCond>FIELD:mode:=:DIRECTORY</displayCond>
+			<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.levelSubpages</label>
+			<config>
+				<type>input</type>
+				<size>5</size>
+				<eval>int</eval>
+			</config>
+		</TCEforms>
+	</levelSubpages>	
+	  
+	<limitPages>
+		<TCEforms>
+		<displayCond>FIELD:mode:=:DIRECTORY</displayCond>
+			<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.limitPages</label>
+			<config>
+				<type>input</type>
+				<size>5</size>
+			</config>
+		</TCEforms>
+	</limitPages>	
+			  
+			<keywords>
+				<TCEforms>
+				<displayCond>FIELD:mode:=:DIRECTORY</displayCond>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.keywords</label>
+					<config>
+						<type>input</type>
+						<size>30</size>
+						<eval>nospace,lower</eval>
+						<checkbox>1</checkbox>
+					</config>
+				</TCEforms>
+			</keywords>
+			
+			<keywordMode>
+			<TCEforms>
+				<displayCond>FIELD:mode:=:DIRECTORY</displayCond>
+				<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.keywordMode</label>
+				<config>
+					<type>select</type>
+					<items type="array">
+						<numIndex index="0" type="array">
+							<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.keywordMode.0</numIndex>
+							<numIndex index="1">AND</numIndex>
+						</numIndex>
+						<numIndex index="1" type="array">
+							<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.keywordMode.1</numIndex>
+							<numIndex index="1">OR</numIndex>
+						</numIndex>
+						<numIndex index="2" type="array">
+							<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.keywordMode.2</numIndex>
+							<numIndex index="1">NOT</numIndex>
+						</numIndex>
+        			</items>
+				</config>
+			</TCEforms>
+		</keywordMode>
+		
+		<orderPages>
+				<TCEforms>
+				<displayCond>FIELD:mode:=:DIRECTORY</displayCond>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.orderPages</label>
+					<config>
+						<type>select</type>
+						<items type="array">
+							<numIndex index="0" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.orderPages.0</numIndex>
+								<numIndex index="1">NORMAL</numIndex>
+							</numIndex>
+							<numIndex index="1" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.orderPages.1</numIndex>
+								<numIndex index="1">TITLE</numIndex>
+							</numIndex>
+							<numIndex index="2" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.orderPages.2</numIndex>
+								<numIndex index="1">TSTAMP</numIndex>
+							</numIndex>
+							<numIndex index="3" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.orderPages.3</numIndex>
+								<numIndex index="1">CRDATE</numIndex>
+							</numIndex>
+							<numIndex index="4" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.orderPages.4</numIndex>
+								<numIndex index="1">RANDOM</numIndex>
+							</numIndex>
+						</items>
+					</config>
+					<onChange>reload</onChange> 
+				</TCEforms>
+			</orderPages>
+			
+			<sortPages>
+				<TCEforms>
+				<displayCond>FIELD:orderPages:=:NORMAL,TITLE,TSTAMP,CRDATE</displayCond>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.sortPages</label>
+					<config>
+						<type>select</type>
+						<items type="array">
+							<numIndex index="0" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.sortPages.0</numIndex>
+								<numIndex index="1">ASC</numIndex>
+							</numIndex>
+							<numIndex index="1" type="array">
+								<numIndex index="0">LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.sortPages.1</numIndex>
+								<numIndex index="1">DESC</numIndex>
+							</numIndex>
+						</items>
+					</config>
+				</TCEforms>
+			</sortPages>
+			
+			<templateFile>
+				<TCEforms>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.general.templateFile</label>
+					<config>
+						<type>input</type>
+						<size>30</size>
+						<eval>trim</eval>
+						<wizards type="array">
+							<_PADDING>2</_PADDING>
+							<link type="array">
+								<type>popup</type>
+								<title>Link</title>
+								<icon>link_popup.gif</icon>
+								<script>browse_links.php?mode=wizard&amp;act=file</script>
+								<params type="array">
+									<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+								</params>
+								<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+							</link>
+						</wizards>
+					</config>
+				</TCEforms>
+			</templateFile>
+			
+	 	</el>
+      </ROOT>      
+    </sSelections>
+        <sContent>    
+      <ROOT>
+	<TCEforms>
+	  <sheetTitle>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.content.title</sheetTitle>
+	</TCEforms>
+	<type>array</type>
+	<el>
+				<maxWidth>
+				<TCEforms>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.content.maxWidth</label>
+					<config>
+						<type>input</type>
+						<size>3</size>
+						<checkbox>1</checkbox>
+					</config>
+				</TCEforms>
+			</maxWidth>
+
+			<maxHeight>
+				<TCEforms>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.content.maxHeight</label>
+					<config>
+						<type>input</type>
+						<size>3</size>
+						<eval>trim,int</eval>
+						<checkbox>1</checkbox>
+					</config>
+				</TCEforms>
+			</maxHeight>
+			
+			
+			<crop>
+				<TCEforms>
+					<label>LLL:EXT:rt_pageteaser/locallang.xml:flexform.sheets.content.crop</label>
+					<config>
+						<type>input</type>
+						<size>3</size>
+						<eval>trim,int</eval>
+						<checkbox>1</checkbox>
+					</config>
+				</TCEforms>
+			</crop>
+			
+	</el>
+      </ROOT>      
+    </sContent>
+	
+  </sheets>
+</T3DataStructure>
+

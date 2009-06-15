@@ -1,0 +1,10 @@
+plugin.tx_rtpageteaser_pi1 {
+# cat=Universal Pageteaser/dims;type=int; label= Max pages in teaserlist
+limitPages = 20
+
+# cat=Universal Pageteaser/file;type=text; label=Template File
+templateFile = EXT:rt_pageteaser/res/pageteaser_template.html
+
+# cat=Universal Pageteaser/enable;type=boolean; label= Use dam_pages ?
+use_dam_pages = 0
+}

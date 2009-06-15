@@ -1,0 +1,58 @@
+09-03-06 Stefan Voelker <t3x@nyxos.de>
+
+	* finished multilanguage support
+	* new TS option for activating image fallback for translated pages, so it is possible to get the image from the original page
+	* fixed some minor bugs
+	* this will be V 1.4.0
+
+09-03-05 Stefan Voelker <t3x@nyxos.de>
+
+	* multilanguage support (for mode "selected pages")
+	
+08-11-10 Stefan Voelker  <t3x@nyxos.de>
+
+	* bugix: ordering when using 'depth' is now correct
+
+08-11-07 Stefan Voelker  <t3x@nyxos.de>
+
+	* new feature: you can now select the depth of subpages of subpages which should be displayed
+	
+08-10-30 Stefan Voelker  <t3x@nyxos.de>
+
+	* new TS-constant: you will now have to activate dam_pages in the TS-constants (constant: use_dam_pages)
+	* moved constants into pi1/static/constants.txt
+
+08-10-29 Stefan Voelker  <t3x@nyxos.de>
+
+	* CSS is now included via the template file's ###HEADER_ADDITIONS###
+
+08-10-29 Stefan Voelker  <t3x@nyxos.de>
+
+	* new feature: cropping of text (Thanks to Vajk Zelles for this feature request!)
+	* updated the manual
+	* new TS-option for ignoring pages without image (Thanks to Tilman Schlereth for this feature request!)
+	* release of version 1.2.1
+
+08-10-28 Stefan Voelker  <t3x@nyxos.de>
+
+	* new features: order pages and sorting (Thanks to Tilman Schlereth for this feature request!)
+	* updated the manual
+
+08-10-27 Stefan Voelker  <t3x@nyxos.de>
+
+	* now the DAM-class is only loaded, when DAM is loaded (Thanks to Tilman Schlereth for finding this Bug!)
+
+08-10-23 Stefan Voelker  <t3x@nyxos.de>
+
+	* automatic reload of the flexform, after changing the "mode"
+
+08-10-22 Stefan Voelker  <t3x@nyxos.de>
+
+	* Extension now contains every feature for Version 1.0.0
+	* Extension-icons
+	* new TS-option for ignoring pages without page-abstract
+	* Sizes of images can now be set via the PI's Flexform
+
+08-10-20 Stefan Voelker  <t3x@nyxos.de>
+
+	* Initial release
