@@ -613,10 +613,10 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		
 		$markers['###TSTAMP###'] = $cObj->stdWrap($pageData['tstamp'], $this->conf['singleView.']['tstamp_stdWrap.']);
 		
-		if($pageData['navtitle'] == '') {
+		if($pageData['nav_title'] == '') {
 			$markers['###NAVTITLE###'] = '';
 		} else {
-			$markers['###NAVTITLE###'] = $pageData['navtitle'];
+			$markers['###NAVTITLE###'] = '<a href="'.$url.'">'.$pageData['nav_title'].'</a>';
 		}
 		
 		$markers['###CRDATE###'] = $cObj->stdWrap($pageData['crdate'], $this->conf['singleView.']['crdate_stdWrap.']);
