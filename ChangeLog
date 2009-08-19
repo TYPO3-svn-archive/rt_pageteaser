@@ -1,3 +1,8 @@
+09-08-19 Stefan Voelker <t3x@nyxos.de>
+
+	* bugfix (Thanks to Roland Waldner for reporting the bug!)
+	* also the nav_title now is linked, too (this was on Roland's wishlist)
+
 09-03-06 Stefan Voelker <t3x@nyxos.de>
 
 	* finished multilanguage support
