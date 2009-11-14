@@ -94,7 +94,7 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		} else {
 			$limit = $userLimit;
 		}
-		
+	
 		# which mode should be displayed ?	
 		$userMode = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'mode', 'sSelections');
 		
@@ -127,14 +127,17 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 	function getSubpages($masterPid, $limit, $useKeyword, $keywordMode, $orderPages, $sortPages, $use_dam_pages, $userLevel) {
 		$cont = '';
 		$language = $GLOBALS['TSFE']->sys_language_uid;
-
-		# get list of pages with this pid
 		
+		# if no masterPid is set, user actual site-id
+		if ((int)$masterPid == 0) $masterPid = $GLOBALS['TSFE']->id;
+		# get list of pages with this pid
+	
 		# create a list of tree-pid's, when $userLevel > 0
 		if ($userLevel > 0 ) {
 			// Initialize starting point of page tree:
 			$treeStartingPoint = $masterPid;
 			$treeStartingRecord = $this->pi_getRecord('pages', $treeStartingPoint);
+
 			$depth = $userLevel;		
 			
 			// Initialize tree object:
