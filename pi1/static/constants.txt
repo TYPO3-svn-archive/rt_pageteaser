@@ -7,4 +7,7 @@ templateFile = EXT:rt_pageteaser/res/pageteaser_template.html
 
 # cat=Universal Pageteaser/enable;type=boolean; label= Use dam_pages ?
 use_dam_pages = 0
+
+# cat=Universal Pageteaser/enable;type=boolean; label= Use subtitle ?
+use_subtitle = 0
 }

@@ -1,4 +1,8 @@
 plugin.tx_rtpageteaser_pi1 {
+
+	# stdWrap for complete output
+	stdWrap.wrap = |<div class="clearer zero"></div>
+  
 	limitPages = {$plugin.tx_rtpageteaser_pi1.limitPages}
 
 	templateFile = {$plugin.tx_rtpageteaser_pi1.templateFile}
@@ -10,11 +14,12 @@ plugin.tx_rtpageteaser_pi1 {
 	cropOnlyAfterWords = 1
 
 	use_dam_pages = {$plugin.tx_rtpageteaser_pi1.use_dam_pages}
+	
+	use_subtitle = {$plugin.tx_rtpageteaser_pi1.use_subtitle}
 
 	getImageFromStandardPage = 1
 
 	singleView {
-
 		image = IMAGE
 		image {
 			file.maxW = 100m

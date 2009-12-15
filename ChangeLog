@@ -1,3 +1,11 @@
+09-12-15 Stefan Voelker <t3x@nyxos.de>
+
+	* new marker for subtitle, code optimization
+
+09-12-04 Stefan Voelker <t3x@nyxos.de>
+
+	* complete output of plugin can now be wrapped through stdWrap (Thanks to Vajk Zelles for his idea)
+
 09-11-14 Stefan Voelker <t3x@nyxos.de>
 
 	* if no starting-page is selected, the actual page-id is used (Thanks to Klaus Weidenbach for this usefull hint)
