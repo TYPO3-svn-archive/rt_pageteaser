@@ -1,10 +1,14 @@
-09-12-15 Stefan Voelker <t3x@nyxos.de>
+10-05-11 Stefan Voelker <t3x@nyxos.de>
 
-	* new marker for subtitle, code optimization
+	* new feature: linked title can now be deactivated via TS (Thanks to a all the people who requested this)
+
+09-12-29 Stefan Voelker <t3x@nyxos.de>
+
+	* new feature: image can now be linked (Thanks to a bunch of people who requested this), de/activate via TS
 
 09-12-04 Stefan Voelker <t3x@nyxos.de>
 
-	* complete output of plugin can now be wrapped through stdWrap (Thanks to Vajk Zelles for his idea)
+	* complete output of plugin can now be wrapped throught stdWrap (Thanks to Vajk Zelles for his idea)
 
 09-11-14 Stefan Voelker <t3x@nyxos.de>
 

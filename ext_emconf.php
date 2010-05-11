@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "rt_pageteaser".
 #
-# Auto generated 15-12-2009 10:08
+# Auto generated 11-05-2010 08:16
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Universal Pageteaser with different modes (selected pages, subpages, subpages with keywordfilter). Makes use of templates. Uses data from the page properties. Compatibel to dam_pages and templavoila. Support for multilanguage websites.',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '1.5.0',
+	'version' => '1.6.1',
 	'dependencies' => 'cms',
 	'conflicts' => '',
 	'priority' => '',
@@ -41,7 +41,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:22:{s:9:"ChangeLog";s:4:"b3ba";s:10:"README.txt";s:4:"ee2d";s:12:"ext_icon.gif";s:4:"6fc8";s:17:"ext_localconf.php";s:4:"2319";s:14:"ext_tables.php";s:4:"1537";s:19:"flexform_ds_pi1.xml";s:4:"3437";s:13:"locallang.xml";s:4:"79af";s:16:"locallang_db.xml";s:4:"a5a2";s:14:"doc/manual.pdf";s:4:"cbe9";s:14:"doc/manual.sxw";s:4:"0c58";s:19:"doc/wizard_form.dat";s:4:"ee47";s:20:"doc/wizard_form.html";s:4:"3272";s:14:"pi1/ce_wiz.gif";s:4:"656c";s:33:"pi1/class.tx_rtpageteaser_pi1.php";s:4:"6c45";s:41:"pi1/class.tx_rtpageteaser_pi1_wizicon.php";s:4:"80f0";s:13:"pi1/clear.gif";s:4:"cc11";s:17:"pi1/locallang.xml";s:4:"0f35";s:24:"pi1/static/constants.txt";s:4:"5cad";s:24:"pi1/static/editorcfg.txt";s:4:"f467";s:20:"pi1/static/setup.txt";s:4:"af0b";s:18:"res/pageteaser.css";s:4:"61f7";s:28:"res/pageteaser_template.html";s:4:"256a";}',
+	'_md5_values_when_last_written' => 'a:22:{s:9:"ChangeLog";s:4:"bea7";s:10:"README.txt";s:4:"ee2d";s:12:"ext_icon.gif";s:4:"6fc8";s:17:"ext_localconf.php";s:4:"2319";s:14:"ext_tables.php";s:4:"1537";s:19:"flexform_ds_pi1.xml";s:4:"3437";s:13:"locallang.xml";s:4:"79af";s:16:"locallang_db.xml";s:4:"a5a2";s:14:"doc/manual.pdf";s:4:"cbe9";s:14:"doc/manual.sxw";s:4:"0c58";s:19:"doc/wizard_form.dat";s:4:"ee47";s:20:"doc/wizard_form.html";s:4:"3272";s:14:"pi1/ce_wiz.gif";s:4:"656c";s:33:"pi1/class.tx_rtpageteaser_pi1.php";s:4:"c880";s:41:"pi1/class.tx_rtpageteaser_pi1_wizicon.php";s:4:"80f0";s:13:"pi1/clear.gif";s:4:"cc11";s:17:"pi1/locallang.xml";s:4:"0f35";s:24:"pi1/static/constants.txt";s:4:"5cad";s:24:"pi1/static/editorcfg.txt";s:4:"f467";s:20:"pi1/static/setup.txt";s:4:"d7c6";s:18:"res/pageteaser.css";s:4:"61f7";s:28:"res/pageteaser_template.html";s:4:"256a";}',
 	'suggests' => array(
 	),
 );

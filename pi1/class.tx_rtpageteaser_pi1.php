@@ -485,6 +485,8 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		$cont = '';
 		$imagePath = 'uploads/media/';
 		$pageUid = $pageData['uid'];
+		$this->pi_initPIflexForm();
+		
 
 		# cropping
 		$userCrop = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'crop', 'sContent');
@@ -503,15 +505,34 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		if($counter %2 == 1 ? $divClass = 'even': $divClass = 'odd');
 
 		$markers['###oddeven###'] = $divClass;
+		
+		## link
+		$pageId = $pageData['uid'];
+		$linkConf = array(
+		  // Link to current page
+		  'parameter' => $pageId,
+		  // We must add cHash because we use parameters
+		  'useCacheHash' => true,
+		  // We want link only
+		  'returnLast' => 'url',
+		);
+		$language = (int)t3lib_div::_GP('L');
+		if ($language > 0) {
+			// our data set is from pages_language_overlay, so we need to jump to pid
+			$linkConf['parameter'] = $pageData['pid'];
+		}
+		$url = $this->cObj->typoLink('', $linkConf);
 
 		#
 		# the Image
 		#
 		$img = Array();
 		$img = $this->conf['singleView.']['image.'];
+		
+		if ((int)$this->conf['linkImages'] == 1 ? $linkImage = 1 : $linkImage = 0);
 
-		$userMaxWidth = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'maxWidth', 'sSelections');;
-		$userMaxHeight = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'maxHeight', 'sSelections');;
+		$userMaxWidth = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'maxWidth', 'sContent');
+		$userMaxHeight = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'maxHeight', 'sContent');
 
 		if((int)$userMaxWidth > 1) {
 			$img['file.']['maxW'] = (int)$userMaxWidth.'m';
@@ -553,7 +574,12 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 
 		     if( (int)$media->meta['uid'] > 0 ) {
 		     	$img['file'] = $media->meta['file_path'].$media->meta['file_name'];
-		     	$markers['###IMAGE###'] = $this->cObj->IMAGE($img);
+		     	if ($linkImage == 1) {
+		     		$markers['###IMAGE###'] = '<a href="'.$url.'" title="'.$pageData['title'].'">'.$this->cObj->IMAGE($img).'</a>';
+		     	} else {
+		     		$markers['###IMAGE###'] = $this->cObj->IMAGE($img);
+		     	}
+		     	
 		     } else {
 		     	$markers['###IMAGE###'] = '';
 		     }
@@ -563,7 +589,11 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 			if ($pageData['media'] != '' ) {
 				$img['file'] = $imagePath.$pageData['media'];
 				$teaserPicture = $this->cObj->IMAGE($img);
-				$markers['###IMAGE###'] = $teaserPicture;
+				if ($linkImage == 1) {
+		    			$markers['###IMAGE###'] = '<a href="'.$url.'" title="'.$pageData['title'].'">'.$teaserPicture.'</a>';
+		  		 	} else {
+		   				$markers['###IMAGE###'] = $teaserPicture;
+     			}
 			} else {
 				// there's no image in pages / pages_overlay
 				if ($imageFallBack == 1 && $language > 0) {
@@ -574,7 +604,11 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 						// use original media info
 						$img['file'] = $imagePath.$origPage['media'];
 						$teaserPicture = $this->cObj->IMAGE($img);
-						$markers['###IMAGE###'] = $teaserPicture;
+						if ($linkImage == 1) {
+		     				$markers['###IMAGE###'] = '<a href="'.$url.'" title="'.$pageData['title'].'">'.$teaserPicture.'</a>';
+		    		 	} else {
+		     				$markers['###IMAGE###'] = $teaserPicture;
+		     			}
 					} else {
 						// if there is no image, clear marker
 						$markers['###IMAGE###'] = '';
@@ -587,24 +621,17 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		}
 
 		// linked title
-
-		$pageId = $pageData['uid'];
-		$linkConf = array(
-		  // Link to current page
-		  'parameter' => $pageId,
-		  // We must add cHash because we use parameters
-		  'useCacheHash' => true,
-		  // We want link only
-		  'returnLast' => 'url',
-		);
-		$language = (int)t3lib_div::_GP('L');
-		if ($language > 0) {
-			// our data set is from pages_language_overlay, so we need to jump to pid
-			$linkConf['parameter'] = $pageData['pid'];
+		$noLinkedTitle = (int)$this->conf['noLinkedTitle'];
+		
+		if ($noLinkedTitle == 1) {
+			// don't link titles
+			$markers['###TITLE###'] = $pageData['title'];
 		}
-		$url = $this->cObj->typoLink('', $linkConf);
-
-		$markers['###TITLE###'] = '<a href="'.$url.'">'.$pageData['title'].'</a>';
+		else {
+			// link titles
+			$markers['###TITLE###'] = '<a href="'.$url.'">'.$pageData['title'].'</a>';
+		}
+		
 
 		// subtitle
 		if ($use_subtitle == 1) {
@@ -614,7 +641,6 @@ class tx_rtpageteaser_pi1 extends tslib_pibase {
 		}
 
 		// teaser text
-
 		$teaserText = $cObj->stdWrap(htmlspecialchars($pageData['abstract']), $this->conf['singleView.']['abstract_stdWrap.']);
 
 		# check for cropping

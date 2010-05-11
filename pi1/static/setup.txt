@@ -12,6 +12,10 @@ plugin.tx_rtpageteaser_pi1 {
 	ignorePagesWithoutImage = 0
 
 	cropOnlyAfterWords = 1
+	
+	linkImages = 1
+	
+	noLinkedTitle = 0
 
 	use_dam_pages = {$plugin.tx_rtpageteaser_pi1.use_dam_pages}
 	
